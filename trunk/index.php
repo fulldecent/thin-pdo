@@ -42,7 +42,7 @@ $released = "November 28, 2010";
 		</div>
 		<div id="right">
 			<h2 class="first"><a name="project-overview">Project Overview</a></h2>
-			<p>This project provides a minimal wrapper for <a href="http://us3.php.net/manual/en/book.pdo.php">PHP's PDO (PHP Data Objects) extension</a> designed for ease-of-use and saving development time/effort.
+			<p>This project provides a minimal extension for <a href="http://us3.php.net/manual/en/book.pdo.php">PHP's PDO (PHP Data Objects) class</a> designed for ease-of-use and saving development time/effort.
 			This is achived by providing methods - delete, insert, select, and update - for quickly building common SQL statements, handling exceptions when
 			SQL errors are produced, and automatically returning results/number of affected rows for the appropriate SQL statement types.</p>
 
