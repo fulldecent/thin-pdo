@@ -1,16 +1,9 @@
 <?php
-class db {
-	/*The project's pdo attribute holds an instance of PHP's PDO class.  It's public, which allows
-	developers to access PDO's methods directly.  See http://us3.php.net/manual/en/book.pdo.php
-	for more information on PDO.*/
-	public $pdo;
-
+class db extends PDO {
 	private $error;
 	private $sql;
 	private $bind;
 
-	/*The constructor uses PHP's built-in PDO class to establish a database connection. See
-	http://us3.php.net/manual/en/pdo.connections.php for more information on the $dsn parameter.*/
 	public function __construct($dsn, $user="", $passwd="") {
 		$options = array(
 			PDO::ATTR_PERSISTENT => true, 
@@ -18,7 +11,7 @@ class db {
 		);
 
 		try {
-			$this->pdo = new PDO($dsn, $user, $passwd, $options);
+			parent::__construct($dsn, $user, $passwd, $options);
 		} catch (PDOException $e) {
 			$this->error = $e->getMessage();
 		}
@@ -32,16 +25,13 @@ class db {
 		echo "<pre>", print_r($this), "</pre>";	
 	}
 
-	/*DELETE statement.*/
 	public function delete($table, $where, $bind="") {
 		$sql = "DELETE FROM " . $table . " WHERE " . $where . ";";
 		$this->run($sql, $bind);
 	}
 
-	/*INSERT and UPDATE make use of this function to ensure that only existing field names within the appropriate table 
-	are being populated in the sql.*/
 	private function filter($table, $info) {
-		$driver = $this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
+		$driver = $this->getAttribute(PDO::ATTR_DRIVER_NAME);
 		if($driver == 'sqlite') {
 			$sql = "PRAGMA table_info('" . $table . "');";
 			$key = "name";
@@ -74,7 +64,6 @@ class db {
 		return $bind;
 	}
 
-	/*INSERT statement.*/
 	public function insert($table, $info) {
 		$fields = $this->filter($table, $info);
 		$sql = "INSERT INTO " . $table . " (" . implode($fields, ", ") . ") VALUES (:" . implode($fields, ", :") . ");";
@@ -84,33 +73,25 @@ class db {
 		return $this->run($sql, $bind);
 	}
 
-	/*This method handles the actual execution of all sql statements within this class.  Because it is public, the run
-	method can also be used to process custom sql statements.  Results will automatically be returned for the appropriate
-	statement types.*/
 	public function run($sql, $bind="") {
-		if(isset($this->pdo)) {
-			$this->sql = trim($sql);
-			$this->bind = $this->cleanup($bind);
-			$this->error = "";
+		$this->sql = trim($sql);
+		$this->bind = $this->cleanup($bind);
+		$this->error = "";
 
-			try {
-				$pdostmt = $this->pdo->prepare($this->sql);
-				if($pdostmt->execute($this->bind) !== false) {
-					/*If appropriate, return the results in an associative array, or return the number of records that were
-					affected by the query.*/
-					if(preg_match("/^(" . implode("|", array("select", "describe", "pragma")) . ") /i", $this->sql))
-						return $pdostmt->fetchAll(PDO::FETCH_ASSOC);
-					elseif(preg_match("/^(" . implode("|", array("delete", "insert", "update")) . ") /i", $this->sql))
-						return $pdostmt->rowCount();
-				}	
-			} catch (PDOException $e) {
-				$this->error = $e->getMessage();	
-				return false;
-			}
+		try {
+			$pdostmt = $this->prepare($this->sql);
+			if($pdostmt->execute($this->bind) !== false) {
+				if(preg_match("/^(" . implode("|", array("select", "describe", "pragma")) . ") /i", $this->sql))
+					return $pdostmt->fetchAll(PDO::FETCH_ASSOC);
+				elseif(preg_match("/^(" . implode("|", array("delete", "insert", "update")) . ") /i", $this->sql))
+					return $pdostmt->rowCount();
+			}	
+		} catch (PDOException $e) {
+			$this->error = $e->getMessage();	
+			return false;
 		}
 	}
 
-	/*SELECT statement.*/
 	public function select($table, $where="", $bind="", $fields="*") {
 		$sql = "SELECT " . $fields . " FROM " . $table;
 		if(!empty($where))
@@ -119,7 +100,6 @@ class db {
 		return $this->run($sql, $bind);
 	}
 
-	/*UPDATE statement.*/
 	public function update($table, $info, $where, $bind="") {
 		$fields = $this->filter($table, $info);
 		$fieldSize = sizeof($fields);
