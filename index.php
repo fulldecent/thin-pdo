@@ -1,7 +1,7 @@
 <?php
 include("class.db.php");
-$version = "1.0.0";
-$released = "November 27, 2010";
+$version = "1.0.1";
+$released = "November 28, 2010";
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
