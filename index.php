@@ -87,10 +87,10 @@ echo '<pre>', highlight_string('<?php
 public function debug() { }
 
 if(false !== $db->select("mytable")) {
-//Continue
+	//Continue
 }
 else
-$db->debug();
+	$db->debug();
 
 ?>', true), '</pre>';
 
@@ -111,7 +111,7 @@ $db->delete("mytable", "Age < 30");
 //DELETE #2 w/Prepared Statement
 $lname = "Doe";
 $bind = array(
-":lname" => $lname
+	":lname" => $lname
 )
 $db->delete("mytable", "LName = :lname", $bind);
 ?>', true), '</pre>';
@@ -127,10 +127,10 @@ echo '<pre>', highlight_string('<?php
 public function insert($table, $info) { }
 
 $insert = array(
-"FName" => "John",
-"LName" => "Doe",
-"Age" => 26,
-"Gender" => "male"
+	"FName" => "John",
+	"LName" => "Doe",
+	"Age" => 26,
+	"Gender" => "male"
 );
 $db->insert("mytable", $insert);
 ?>', true), '</pre>';
@@ -148,12 +148,12 @@ public function run($sql, $bind="") { }
 //MySQL
 $sql = <<<STR
 CREATE TABLE mytable (
-ID int(11) NOT NULL AUTO_INCREMENT,
-FName varchar(50) NOT NULL,
-LName varchar(50) NOT NULL,
-Age int(11) NOT NULL,
-Gender enum(\'male\',\'female\') NOT NULL,
-PRIMARY KEY (ID)
+	ID int(11) NOT NULL AUTO_INCREMENT,
+	FName varchar(50) NOT NULL,
+	LName varchar(50) NOT NULL,
+	Age int(11) NOT NULL,
+	Gender enum(\'male\',\'female\') NOT NULL,
+	PRIMARY KEY (ID)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 STR;
 $db->run($sql);
@@ -161,11 +161,11 @@ $db->run($sql);
 //SQLite
 $sql = <<<STR
 CREATE TABLE mytable (
-ID INTEGER PRIMARY KEY,
-LName TEXT,
-FName TEXT,
-Age INTEGER,
-Gender TEXT
+	ID INTEGER PRIMARY KEY,
+	LName TEXT,
+	FName TEXT,
+	Age INTEGER,
+	Gender TEXT
 )
 STR;
 $db->run($sql);
@@ -192,7 +192,7 @@ $results = $db->select("mytable", "Gender = \'male\'");
 //SELECT #3 w/Prepared Statement
 $search = "J";
 $bind = array(
-":search" => "%$search"
+	":search" => "%$search"
 );
 $results = $db->select("mytable", "FName LIKE :search", $bind);
 ?>', true), '</pre>';
@@ -209,20 +209,20 @@ public function update($table, $info, $where, $bind="") { }
 
 //Update #1
 $update = array(
-"FName" => "Jane",
-"Gender" => "female"
+	"FName" => "Jane",
+	"Gender" => "female"
 );
 $db->update("mytable", $update, "FName = \'John\'");
 
 //Update #2 w/Prepared Statement
 $update = array(
-"Age" => 24
+	"Age" => 24
 );
 $fname = "Jane";
 $lname = "Doe";
 $bind = array(
-":fname" => $fname,
-":lname" => $lname
+	":fname" => $fname,
+	":lname" => $lname
 );
 $db->update("mytable", $update, "FName = :fname AND LName = :lname", $bind);
 ?>', true), '</pre>';
