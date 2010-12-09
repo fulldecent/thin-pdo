@@ -19,15 +19,6 @@ class db extends PDO {
 		}
 	}
 
-	public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat="html") {
-		if(function_exists($errorCallbackFunction)) {
-			$this->errorCallbackFunction = $errorCallbackFunction;	
-			if(!in_array(strtolower($errorMsgFormat), array("html", "text")))
-				$errorMsgFormat = "html";
-			$this->errorMsgFormat = $errorMsgFormat;	
-		}	
-	}
-
 	private function debug() {
 		if(!empty($this->errorCallbackFunction)) {
 			$error = array("Error" => $this->error);
@@ -56,12 +47,16 @@ class db extends PDO {
 				$msg .= "\n\t</div>\n</div>";
 			}
 			elseif($this->errorMsgFormat == "text") {
-				$msg .= "SQL Error\n------------------------------------------------------------";
+				$msg .= "SQL Error\n" . str_repeat("-", 50);
 				foreach($error as $key => $val)
 					$msg .= "\n\n$key:\n$val";
 			}
-			$funct = $this->errorCallbackFunction;
-			$funct($msg);
+
+			//Variable functions for won't work with language constructs such as echo and print, so these are replaced with print_r.
+			if(in_array($this->errorCallbackFunction, array("echo", "print")))
+				$this->errorCallbackFunction = "print_r";
+			$func = $this->errorCallbackFunction;
+			$func($msg);
 		}
 	}
 
@@ -139,6 +134,15 @@ class db extends PDO {
 			$sql .= " WHERE " . $where;
 		$sql .= ";";
 		return $this->run($sql, $bind);
+	}
+
+	public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat="html") {
+		if(function_exists($errorCallbackFunction)) {
+			$this->errorCallbackFunction = $errorCallbackFunction;	
+			if(!in_array(strtolower($errorMsgFormat), array("html", "text")))
+				$errorMsgFormat = "html";
+			$this->errorMsgFormat = $errorMsgFormat;	
+		}	
 	}
 
 	public function update($table, $info, $where, $bind="") {
