@@ -1,7 +1,7 @@
 <?php
 include("class.db.php");
-$version = "1.0.1";
-$released = "November 28, 2010";
+$version = "1.0.2";
+$released = "December 9, 2010";
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -32,11 +32,11 @@ $released = "November 28, 2010";
 				<li><a href="#system-requirements">System Requirements</a></li>
 				<li><a href="#db-class-constructor">db Class Constructor</a></li>
 				<li><a href="#db-class-methods">db Class Methods</a></li>
-				<li class="indent"><a href="#debug">debug</a></li>
 				<li class="indent"><a href="#delete">delete</a></li>
 				<li class="indent"><a href="#insert">insert</a></li>
 				<li class="indent"><a href="#run">run</a></li>
 				<li class="indent"><a href="#select">select</a></li>
+				<li class="indent"><a href="#setErrorCallbackFunction">setErrorCallbackFunction</a></li>
 				<li class="indent"><a href="#update">update</a></li>
 			</ul>
 		</div>
@@ -78,25 +78,6 @@ $db = new db("sqlite:db.sqlite");
 
 			<h2><a name="db-class-methods">db Class Methods</a></h2>
 			<p>Below you will find a detailed explanation along with code samples for each of the 6 methods included in the db class.</p>
-
-			<h2><a name="debug">debug</a></h2>
-			<?php
-
-echo '<pre>', highlight_string('<?php
-//debug Method Declaration
-public function debug() { }
-
-if(false !== $db->select("mytable")) {
-	//Continue
-}
-else
-	$db->debug();
-
-?>', true), '</pre>';
-
-			?>
-			<p>When a SQL statement fails, the appropriate function (delete, insert, select, update, run) will return boolean false.  The project's debug method 
-			allows you to see the full SQL statement, bind parameters, and error message.</p>
 
 			<h2><a name="delete">delete</a></h2>
 			<?php
@@ -198,6 +179,33 @@ $results = $db->select("mytable", "FName LIKE :search", $bind);
 ?>', true), '</pre>';
 
 			?>
+			<h2><a name="setErrorCallbackFunction">setErrorCallbackFunction</a></h2>
+			<?php
+
+echo '<pre>', highlight_string('<?php
+//setErrorCallbackFunction Method Declaration
+public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat="html") { }
+
+//The error message can then be displayed, emailed, etc within the callback function.
+function myErrorHandler($error) {
+}
+
+$db = new db("mysql:host=127.0.0.1;port=8889;dbname=mydb", "dbuser", "dbpasswd");
+$db->setErrorCallbackFunction("myErrorHandler");
+/*
+Text Version
+$db->setErrorCallbackFunction("myErrorHandler", "text");
+
+Internal/Built-In PHP Function
+$db->setErrorCallbackFunction("echo");
+*/
+$results = $db->select("mynonexistingtable");
+?>', true), '</pre>';
+
+			?>
+			<p>When a SQL error occurs, this project will send a formatted (html or text) error message to a callback function specified through the setErrorCallbackFunction
+			method.  The callback function's name should be supplied as a string without parenthesis.  As you can see in the examples provided above, you can specify an 
+			internal/built-in PHP function or a custom function you've created.</p>
 			<p>If no SQL errors are produced, this method will return an associative array of results.</p>
 
 			<h2><a name="update">update</a></h2>
