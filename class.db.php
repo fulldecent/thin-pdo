@@ -3,6 +3,8 @@ class db extends PDO {
 	private $error;
 	private $sql;
 	private $bind;
+	private $errorCallbackFunction;
+	private $errorMsgFormat;
 
 	public function __construct($dsn, $user="", $passwd="") {
 		$options = array(
@@ -17,12 +19,50 @@ class db extends PDO {
 		}
 	}
 
-	public function __toString() {
-		$this->debug();
+	public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat="html") {
+		if(function_exists($errorCallbackFunction)) {
+			$this->errorCallbackFunction = $errorCallbackFunction;	
+			if(!in_array(strtolower($errorMsgFormat), array("html", "text")))
+				$errorMsgFormat = "html";
+			$this->errorMsgFormat = $errorMsgFormat;	
+		}	
 	}
 
-	public function debug() {
-		echo "<pre>", print_r($this), "</pre>";	
+	private function debug() {
+		if(!empty($this->errorCallbackFunction)) {
+			$error = array("Error" => $this->error);
+			if(!empty($this->sql))
+				$error["SQL Statement"] = $this->sql;
+			if(!empty($this->bind))
+				$error["Bind Parameters"] = trim(print_r($this->bind, true));
+
+			$backtrace = debug_backtrace();
+			if(!empty($backtrace)) {
+				foreach($backtrace as $info) {
+					if($info["file"] != __FILE__)
+						$error["Backtrace"] = $info["file"] . " at line " . $info["line"];	
+				}		
+			}
+
+			$msg = "";
+			if($this->errorMsgFormat == "html") {
+				if(!empty($error["Bind Parameters"]))
+					$error["Bind Parameters"] = "<pre>" . $error["Bind Parameters"] . "</pre>";
+				$css = trim(file_get_contents("error.css"));
+				$msg .= '<style type="text/css">' . "\n" . $css . "\n</style>";
+				$msg .= "\n" . '<div class="db-error">' . "\n\t<h3>SQL Error</h3>";
+				foreach($error as $key => $val)
+					$msg .= "\n\t<label>" . $key . ":</label>" . $val;
+				$msg .= "\n\t</div>\n</div>";
+			}
+			elseif($this->errorMsgFormat == "text") {
+				$msg .= "SQL Error\n------------------------------------------------------------";
+				foreach($error as $key => $val)
+					$msg .= "\n\n$key:\n$val";
+			}
+			$funct = $this->errorCallbackFunction;
+			$funct($msg);
+		}
 	}
 
 	public function delete($table, $where, $bind="") {
@@ -88,6 +128,7 @@ class db extends PDO {
 			}	
 		} catch (PDOException $e) {
 			$this->error = $e->getMessage();	
+			$this->debug();
 			return false;
 		}
 	}
