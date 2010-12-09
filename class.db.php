@@ -52,9 +52,6 @@ class db extends PDO {
 					$msg .= "\n\n$key:\n$val";
 			}
 
-			//Variable functions for won't work with language constructs such as echo and print, so these are replaced with print_r.
-			if(in_array($this->errorCallbackFunction, array("echo", "print")))
-				$this->errorCallbackFunction = "print_r";
 			$func = $this->errorCallbackFunction;
 			$func($msg);
 		}
@@ -137,6 +134,10 @@ class db extends PDO {
 	}
 
 	public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat="html") {
+		//Variable functions for won't work with language constructs such as echo and print, so these are replaced with print_r.
+		if(in_array(strtolower($errorCallbackFunction), array("echo", "print")))
+			$errorCallbackFunction = "print_r";
+
 		if(function_exists($errorCallbackFunction)) {
 			$this->errorCallbackFunction = $errorCallbackFunction;	
 			if(!in_array(strtolower($errorMsgFormat), array("html", "text")))
