@@ -96,6 +96,8 @@ class db extends PDO {
             else
                 $bind = array();
         }
+		foreach($bind as $key => $val)
+			$bind[$key] = stripslashes($val);
         return $bind;
     }
 
