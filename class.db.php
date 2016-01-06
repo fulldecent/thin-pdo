@@ -130,11 +130,11 @@ class db extends PDO {
         }
     }
 
-    public function select($table, $where="", $bind="", $fields="*") {
+    public function select($table, $where="", $bind="", $fields="*", $extra="") {
         $sql = "SELECT " . $fields . " FROM " . $table;
         if(!empty($where))
             $sql .= " WHERE " . $where;
-        $sql .= ";";
+        $sql .= " $extra;";
         return $this->run($sql, $bind);
     }
 
