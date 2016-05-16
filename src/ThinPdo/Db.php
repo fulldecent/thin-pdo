@@ -2,7 +2,7 @@
 
 namespace ThinPdo;
 
-class Db extends PDO {
+class Db extends \PDO {
     private $error;
     private $sql;
     private $bind;
