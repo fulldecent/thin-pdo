@@ -1,0 +1,23 @@
+{
+    "name": "fulldecent/pdo-wrapper",
+    "description": "A minimal extension for PHP's PDO class designed to make running SQL statements easier",
+    "homepage": "http://github.com/fulldecent/pdo-wrapper",
+    "license": "MIT",
+    "keywords": ["mysql", "pdo", "database", "postgresql", "oracle", "wrapper"],
+    "version": "1.2.0",
+    "authors": [
+        {
+            "name": "William Entriken",
+            "email": "github.com@phor.net",
+            "homepage": "http://phor.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "PdoWrapper": "src/"
+        }
+    }
+}

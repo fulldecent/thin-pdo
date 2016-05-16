@@ -1,5 +1,8 @@
 <?php
-class db extends PDO {
+
+namespace PdoWrapper;
+
+class Db extends PDO {
     private $error;
     private $sql;
     private $bind;
