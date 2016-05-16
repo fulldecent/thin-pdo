@@ -3,7 +3,7 @@ PHP PDO Wrapper Class
 
 A minimal extension for PHP's PDO class designed to make running SQL statements easier.
 
-[ Download the latest release](https://github.com/fulldecent/php-pdo-wrapper-class/releases>)
+[Download the latest release](https://github.com/fulldecent/thin-pdo/releases)
 
 Project Overview
 ----------------
