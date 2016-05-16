@@ -12,14 +12,14 @@ class Db extends \PDO {
     public function __construct($dsn, $user="", $passwd="", $options=array()) {
         if(empty($options)){
             $options = array(
-                PDO::ATTR_PERSISTENT => false,
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_PERSISTENT => false,
+                \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             );
         }
 
         try {
             parent::__construct($dsn, $user, $passwd, $options);
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             trigger_error($e->getMessage());
             return false;
         }
@@ -69,7 +69,7 @@ class Db extends \PDO {
     }
 
     private function filter($table, $info) {
-        $driver = $this->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $driver = $this->getAttribute(\PDO::ATTR_DRIVER_NAME);
         if($driver == 'sqlite') {
             $sql = "PRAGMA table_info('" . $table . "');";
             $key = "name";
@@ -122,11 +122,11 @@ class Db extends \PDO {
             $pdostmt = $this->prepare($this->sql);
             if($pdostmt->execute($this->bind) !== false) {
                 if(preg_match("/^(" . implode("|", array("select", "describe", "pragma")) . ")\\s/i", $this->sql))
-                    return $pdostmt->fetchAll(PDO::FETCH_ASSOC);
+                    return $pdostmt->fetchAll(\PDO::FETCH_ASSOC);
                 elseif(preg_match("/^(" . implode("|", array("delete", "insert", "update")) . ")\\s/i", $this->sql))
                     return $pdostmt->rowCount();
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             $this->error = $e->getMessage();
             $this->debug();
             return false;
