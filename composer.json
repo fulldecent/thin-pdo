@@ -1,5 +1,5 @@
 {
-    "name": "fulldecent/pdo-wrapper",
+    "name": "fulldecent/thin-pdo",
     "description": "A minimal extension for PHP's PDO class designed to make running SQL statements easier",
     "homepage": "http://github.com/fulldecent/pdo-wrapper",
     "license": "MIT",
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-0": {
-            "PdoWrapper": "src/"
+            "ThinPdo": "src/"
         }
     }
 }

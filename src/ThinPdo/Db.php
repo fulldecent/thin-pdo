@@ -1,6 +1,6 @@
 <?php
 
-namespace PdoWrapper;
+namespace ThinPdo;
 
 class Db extends PDO {
     private $error;
