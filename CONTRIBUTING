@@ -1,0 +1,9 @@
+# Development process
+
+Commit directly to `master`
+
+# Release process
+
+ 1. Bump version in https://github.com/fulldecent/thin-pdo/blob/master/composer.json
+ 2. Make GitHub tag/release
+ 3. Update at https://packagist.org/packages/fulldecent/thin-pdo
