@@ -75,7 +75,7 @@ class Db extends \PDO {
             $key = "name";
         }
         elseif($driver == 'mysql') {
-            $sql = "DESCRIBE " . $table . ";";
+            $sql = "DESCRIBE `" . $table . "`;";
             $key = "Field";
         }
         else {
@@ -106,7 +106,7 @@ class Db extends \PDO {
 
     public function insert($table, $info, $ignore=false) {
         $fields = $this->filter($table, $info);
-        $sql = ($ignore?"INSERT IGNORE":"INSERT")." INTO " . $table . " (`" . implode($fields, "`, `") . "`) VALUES (:" . implode($fields, ", :") . ");";
+        $sql = ($ignore?"INSERT IGNORE":"INSERT")." INTO `" . $table . "` (`" . implode($fields, "`, `") . "`) VALUES (:" . implode($fields, ", :") . ");";
         $bind = array();
         foreach($fields as $field)
             $bind[":$field"] = $info[$field];
@@ -134,7 +134,7 @@ class Db extends \PDO {
     }
 
     public function select($table, $where="", $bind="", $fields="*", $extra="") {
-        $sql = "SELECT " . $fields . " FROM " . $table;
+        $sql = "SELECT " . $fields . " FROM `" . $table . "`";
         if(!empty($where))
             $sql .= " WHERE " . $where;
         $sql .= " $extra;";
@@ -158,7 +158,7 @@ class Db extends \PDO {
         $fields = $this->filter($table, $info);
         $fieldSize = sizeof($fields);
 
-        $sql = "UPDATE " . $table . " SET ";
+        $sql = "UPDATE `" . $table . "` SET ";
         for($f = 0; $f < $fieldSize; ++$f) {
             if($f > 0)
                 $sql .= ", ";
