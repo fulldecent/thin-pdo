@@ -28,7 +28,7 @@ Below you will find a detailed explanation along with code samples for each of t
 
 ### constructor
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //__contruct Method Declaration
 public function __construct($dsn, $user="", $passwd="") { }
@@ -39,7 +39,7 @@ $db = new db("mysql:host=127.0.0.1;port=8889;dbname=mydb", "dbuser", "dbpas
 //SQLite
 $db = new db("sqlite:db.sqlite");
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 More information can be found on how to set the dsn parameter by following the links provided below.
 
@@ -51,7 +51,7 @@ More information can be found on how to set the dsn parameter by following the l
 
 ### delete
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //delete Method Declaration
 public function delete($table, $where, $bind="") { }
@@ -66,13 +66,13 @@ $bind = array(
 )
 $db->delete("mytable", "LName = :lname", $bind);
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 If no SQL errors are produced, this method will return the number of rows affected by the DELETE statement.
 
 ### insert
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //insert Method Declaration
 public function insert($table, $info) { }
@@ -85,13 +85,13 @@ $insert = array(
 );
 $db->insert("mytable", $insert);
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 If no SQL errors are produced, this method will return the number of rows affected by the INSERT statement.
 
 ### run
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //run Method Declaration
 public function run($sql, $bind="") { }
@@ -121,13 +121,13 @@ CREATE TABLE mytable (
 STR;
 $db->run($sql);
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 This method is used to run free-form SQL statements that can't be handled by the included delete, insert, select, or update methods. If no SQL errors are produced, this method will return the number of affected rows for DELETE, INSERT, and UPDATE statements, or an associate array of results for SELECT, DESCRIBE, and PRAGMA statements.
 
 ### select
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //select Method Declaration
 public function select($table, $where="", $bind="", $fields="*") { }
@@ -145,11 +145,11 @@ $bind = array(
 );
 $results = $db->select("mytable", "FName LIKE :search", $bind);
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 ### setErrorCallbackFunction
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //setErrorCallbackFunction Method Declaration
 public function setErrorCallbackFunction($errorCallbackFunction, $errorMsgFormat="html") { }
@@ -169,7 +169,7 @@ $db->setErrorCallbackFunction("echo");
 */
 $results = $db->select("mynonexistingtable");
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 When a SQL error occurs, this project will send a formatted (html or text) error message to a callback function specified through the setErrorCallbackFunction method. The callback function's name should be supplied as a string without parenthesis. As you can see in the examples provided above, you can specify an internal/built-in PHP function or a custom function you've created.
 
@@ -177,7 +177,7 @@ If no SQL errors are produced, this method will return an associative array of r
 
 ### update
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```php
 <?php
 //update Method Declaration
 public function update($table, $info, $where, $bind="") { }
@@ -201,6 +201,6 @@ $bind = array(
 );
 $db->update("mytable", $update, "FName = :fname AND LName = :lname", $bind);
 ?>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```
 
 If no SQL errors are produced, this method will return the number of rows affected by the UPDATE statement.
