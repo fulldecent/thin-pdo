@@ -133,8 +133,9 @@ class Db extends \PDO {
         }
     }
 
-    public function select($table, $where="", $bind="", $fields="*", $extra="") {
-        $sql = "SELECT " . $fields . " FROM `" . $table . "`";
+    public function select($tables, $where="", $bind="", $fields="*", $extra="") {
+        $quotedTables = '`' . str_replace(',', '`,`', $tables) . '`';
+        $sql = "SELECT " . $fields . " FROM $quotedTables";
         if(!empty($where))
             $sql .= " WHERE " . $where;
         $sql .= " $extra;";
