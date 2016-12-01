@@ -89,6 +89,8 @@ $db->insert("mytable", $insert);
 
 If no SQL errors are produced, this method will return the number of rows affected by the INSERT statement.
 
+See also: `$db->lastInsertId();` which is inherited from PDO.
+
 ### run
 
 ```php
