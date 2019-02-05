@@ -1,3 +1,7 @@
+DEPRECATION NOTICE: This code worked great for me on production systems for years. Going forward I use and recommend the approach described at https://phpdelusions.net/pdo as superior.
+
+---
+
 PHP PDO Wrapper Class
 =====================
 
